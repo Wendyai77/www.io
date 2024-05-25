@@ -1,0 +1,72 @@
+# 构建和部署 Jekyll 站点到 GitHub Pages 的示例工作流程
+姓名：名称：部署已预装 GitHub Pages 依赖项的 Jekyll
+
+on：
+  # 在针对默认分支的推送上运行# Runs on pushes targeting the default branch
+  push:
+    branches: ["main"]
+
+  # 允许您从“操作”选项卡手动运行此工作流程# Allows you to run this workflow manually from the Actions tab
+  workflow_dispatch:
+
+# Sets permissions of the GITHUB_TOKEN to allow deployment to GitHub Pages
+permissions:
+  contents:   内容：已读
+  pages:   页数： 写
+  id-token:   id-token：写入
+
+# 只允许一次并发部署，跳过正在进行的运行和最新排队之间的排队运行。
+# 但是，不要取消正在进行的运行，因为我们希望这些生产部署能够完成。
+并发性：
+  组：“页面”
+： 错误的
+
+工作：
+  #建立作业
+  建造：
+    运行：ubuntu-latest
+    脚步：
+      -姓名：结帐
+        用途：actions/checkout@v4
+      -姓名：设置页面
+        用途：actions/configure-pages@v5
+      -姓名：使用 Jekyll 构建
+        用途：actions/jekyll-build-pages@v1
+        和：
+          来源： 。/
+          destination: ./_site
+      - name: Upload artifact
+        uses: actions/upload-pages-artifact@v3
+
+  # Deployment job
+  deploy:
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    runs-on: ubuntu-latest
+    needs: build
+    steps:
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4
+              - 名称：缓存
+                用途：actions/cache@v4.0.2
+              permissions:
+  contents: write # only for delete-branch option
+  issues: write
+  pull-requests: write
+  steps:
+- uses: actions/checkout@v4
+- uses: actions/setup-java@v4
+  with:
+    distribution: 'temurin' # See 'Supported distributions' for available options
+    java-version: '21'
+- run: java HelloWorldApp.java
+            - name: phpspec (php-actions)
+  # You may pin to the exact commit or the version.
+  # uses: php-actions/phpspec@0f7c59736d7c4dd8f724a19d413cbc5a2ffbbea4
+  uses: php-actions/phpspec@v0.1.0
+  with:
+    # Configuration file location
+    config: # optional, default is test/phpspec/phpspec.yml
+          
